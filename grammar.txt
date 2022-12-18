@@ -1,42 +1,74 @@
-basic_program :  (prog_stmt)*
+basic_program :  (label_instr)*
 
-prog_stmt:   DATA
-           | DIM
+labeled_instruction: label_def prog_stmt
+                    | prog_stmt
+label_def:  label \:
+prog_stmt:   DATA literal(,literal)?
+           | DEF FN varname(expr (,expr)?) = expr
            | END
-           | FOR
-           | GOSUB
-           | GOTO
-           | IF
-           | INPUT
-           | LET
-           | NEXT
-           | ON
-           | PRINT
+           | FOR varname = start TO end[STEP increment]
+           | GOSUB label
+           | GOTO label
+           | IF expr THEN label
+           | INPUT (prompt;)? (var(,var)?)
+           | LET var = expr
+           | NEXT (var)?
+           | ON expr (GOSUB|GOTO) label (,label)?
+           | PRINT  (expr (;|,)?(,expr(;|,)?)?)*
            | RANDOMIZE
-           | READ
-           | REM
-           | RESTORE
-           | RETURN
+           | READ (var (,var)?
+           | REM  text
+           | RESTORE (label)?
+           | RETURN  
            | STOP
-expressions: literal
+expr: expr_eql
+expr_lgc: expr_eql ((OR|AND|NOT) expr_eql)*
+expr_eql: expr_opmed ((LEQ|EQ|NEQ|LSS|GRT|LEQ|GREQ) expr_opmed)*
+expr_opmed: expr_ophigh ((ADD|SUB) expr_ophigh)*
+expr_ophigh: primary ((MUL|DIV|POW) primary)*
+
+
+primary:     literal
            | varname
            | var
-           | LPAREN (/exp/)
-           | UNMIN exp
-           | UNPLUS exp
-           | POW exp exp
-           | MUL exp exp
-           | DIV exp exp
-           | ADD exp exp
-           | SUB exp exp
-           | exp exp
-           | NEQ exp exp
-           | GRT  exp exp
-           | LSS  exp exp
-           | LEQ exp exp
-           | GREQ exp exp
-           | NOT exp
-           | AND exp exp
-           | OR exp exp
+           | expr
+           | FN\( actual_args?\)
+           | builtin\( actual_args?\)
+           | LPAREN (/expr/)
+           | UMIN primary
+           | UPLUS primary
+
+builtin:   ABS
+        |  ASC
+        |  ATN
+        |  CHR$
+        |  COS
+        |  EXP
+        |  INT
+        |  LEFT$
+        |  LEN
+        |  LOG
+        |  MID$
+        |  RIGHT$
+        |  RND
+        |  SGN
+        |  SIN
+        |  SPC
+        |  SQR
+        |  STR
+        |  TAB
+        |  TAN
+        |  VAL
+
+formal_args: literal (,literal)*
+actual_args: exp (,exp)*
 
 
+label: id
+literal: <any valid floating-point number>
+        |<any valid string>
+prompt: <user input string>
+varname: <any string>
+text:  <any string>
+id: <any valid name>
+var:  <any string array>
