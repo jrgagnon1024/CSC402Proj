@@ -2,12 +2,44 @@ import re
 
 class Lexer:
     # List of token types
-    TOKEN_TYPES = [
-        ('INTEGER', r'\d+'),         # integers
-        ('PLUS', r'\+'),             # plus sign
-        ('MINUS', r'-'),             # minus sign
-        ('MULTIPLY', r'\*'),         # multiply sign
-        ('DIVIDE', r'/'),            # divide sign
+    TOKEN_TYPES = [        # integers
+        ('FLOAT_TYPE', r'float'),
+        ('STRING_TYPE', r'string'),
+        ('DATA', r'data'),
+        ('DEF',  r'def'),
+        ('FN',   r'fn'),
+        ('END',  r'end'),
+        ('FOR',  r'for'),
+        ('TO',   r'to'),
+        ('STEP', r'step'),
+        ('GOSUB', r'gosub'),
+        ('GOTO',  r'goto'),
+        ('IF',    r'if'),
+        ('THEN',  r'then'),
+        ('INPUT',  r'input'),
+        ('LET',   r'let'),
+        ('NEXT',  r'next'),
+        ('ON',    r'on'),
+        ('PRINT', r'print'),
+        ('RANDOMIZE', r'randomize'),
+        ('READ',      r'read'),
+        ('REM',       r'rem'),
+        ('RESTORE',   r'restore'),
+        ('RETURN',    r'return'),
+        ('STOP',      r'stop'),
+        ('NUMBER', r'([0-9]*[.])?[0-9]+'),  # for INTEGER and FLOAT see below
+        ('STRING', r'\"[^\"]*\"'),
+        ('ADD', r'\+'),             # plus sign
+        ('SUB', r'-'),             # minus sign
+        ('MUL', r'\*'),         # multiply sign
+        ('DIV', r'/'),            # divide sign
+        ('POW', r'\^'),
+        ('LEQ',   r'=<'),
+        ('EQ',    r'=='),
+        ('NEQ',   r'<>'),
+        ('LSS',   r'<'),
+        ('GRT',   r'>'),
+        ('GREQ',   r'=>'),
         ('LPAREN', r'\('),           # left parenthesis
         ('RPAREN', r'\)'),           # right parenthesis
         ('ID', r'[A-Z][A-Z0-9]*'),   # identifier
